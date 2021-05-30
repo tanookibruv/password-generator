@@ -1,61 +1,11 @@
 // Assignment Code
 var generateBtn = document.querySelector("#generate");
-var lowercase = "abcdefghijklmnopqrstuvwxyz";
-var uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-var numbers = "0123456789";
-var symbols = "!@#$%&";
-var allChars = lowercase + uppercase + numbers + symbols;
-var randPasswordArray = Array(length);
-randPasswordArray[0] = lowercase;
-randPasswordArray[1] = uppercase;
-randPasswordArray[2] = numbers;
-randPasswordArray[3] = symbols;
+var lowerChar = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+var upperChar = ["A", "B", "C", "D", "E", "F", "G,", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+var numChar = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+var symbols = ["!", "@", "#", "$", "%", "&"];
 
 // Write password to the #password input
-function length(){
-    var length = validLength();
-
-    return length;
-}
-
-function validLength() {
-    var lengthInput, valid;
-    valid = false;
-
-    while(!valid){
-        lengthInput = prompt('Enter character length between 8 and 26');
-        if(lengthInput >=8 && lengthInput <= 26){
-            valid = true;
-        } else {
-            alert('Length is not valid')
-        }
-    }return lengthInput;
-}
-
-var Characters = function () {
-    var Characters = validCharacters();
-
-    return Characters
-    valid = false;
-}
-
-function validCharacters() {
-    var CharactersInput, valid;
-    valid = false;
-
-    while(!valid){
-        CharactersInput = prompt('Enter character types: lowercase, uppercase, numbers, and/or symbols');
-        if(CharactersInput = lowercase)
-          (CharactersInput = uppercase)
-          (CharactersInput = numbers)
-          (CharactersInput = symbols){
-              valid = true;
-          } else {
-              alert('Types are not valid')
-          }
-    }return CharactersInput;
-}
-
 function writePassword() {
   var password = generatePassword();
   var passwordText = document.querySelector("#password");
@@ -63,24 +13,56 @@ function writePassword() {
   passwordText.value = password;
 }
 
+//Functions made for random passwords types and lengths
 function generatePassword() {
-    var length = validLength();
+    //Password length
+    var length = (prompt('Enter a desired password length'));
+    while(length <= 7 || length >= 128) {
+        alert('Password length must be between 8-128 characters long, Please re-enter amount');
+        var length = (prompt('Enter a desired password length'))
+    }
 
-    var Characters = validCharacters();
+    alert(`Your password will be ${length} characters long.`)
 
+    //Password Character Types
+    var yesLower = confirm('Click OK to add lowercase letters in your password?');
+    var yesUpper = confirm('Click OK to add uppercase letters in your password?');
+    var yesNum = confirm('Click OK to add numbers in your password?');
+    var yesSymbol = confirm('Click OK to add symbols in your password?');
+
+    while(yesLower === false && yesUpper === false && yesNum === false && yesSymbol === false) {
+        alert('You must choose at least one character type!');
+        var yesLower = confirm('Click OK to add lowercase letters in your password?');
+        var yesUpper = confirm('Click OK to add uppercase letters in your password?');
+        var yesNum = confirm('Click OK to add numbers in your password?');
+        var yesSymbol = confirm('Click OK to add symbols in your password?');
+    }
+
+    //Assigning password characters
+    var passwordChar = []
+
+    if (yesLower) {
+        passwordChar = passwordChar.concat(lowerChar)
+    }
+    if (yesUpper) {
+        passwordChar = passwordChar.concat(upperChar)
+    }
+    if (yesNum) {
+        passwordChar = passwordChar.concat(numChar)
+    }
+    if (yesSymbol) {
+        passwordChar = passwordChar.concat(symbols)
+    }
+
+    //Randomizing password with selected types
+    var randomPass = ""
+
+    for (var i = 0; i < length; i++) {
+        randomPass = randomPass + passwordChar[Math.floor(Math.random() * passwordChar.length)];
+    }
+    return randomPass;
     
 }
-
-
-function shuffleArray(array) {
-    for (var i = array.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var temp = array[i];
-      array[i] = array[j];
-      array[j] = temp;
-    }
-    return array;
-  }
 
 
 // Add event listener to generate button
